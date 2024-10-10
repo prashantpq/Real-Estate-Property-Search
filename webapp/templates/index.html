@@ -1,0 +1,32 @@
+<!-- webapp/templates/index.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Real Estate Property Search</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <h1>Real Estate Property Price Prediction</h1>
+        <form action="/predict" method="post" enctype="multipart/form-data">
+            <div>
+                <label for="text_input">Property Description:</label>
+                <textarea id="text_input" name="text_input" rows="4" required></textarea>
+            </div>
+            <div>
+                <label for="image_input">Property Image:</label>
+                <input type="file" id="image_input" name="image_input" accept="image/*" required>
+            </div>
+            <div>
+                <button type="submit">Predict Price</button>
+            </div>
+        </form>
+        {% if prediction %}
+            <h2>{{ prediction }}</h2>
+        {% endif %}
+    </div>
+    <script src="{{ url_for('static', filename='js/app.js') }}"></script>
+</body>
+</html>
