@@ -1,21 +1,9 @@
-# src/utils/data_loader.py
-
 import pandas as pd
+from sklearn.model_selection import train_test_split
 
-def load_data(data_path):
-    df = pd.read_csv(data_path)
-    return df
-
-def split_data(df, features, target):
-    X = df[features]
-    y = df[target]
-    return X, y
-
-if __name__ == "__main__":
-    # Example usage
-    data_path = '../data/processed/listings_clean.csv'
-    df = load_data(data_path)
-    features = ['feature1', 'feature2', 'feature3']  # Replace with actual feature names
-    target = 'target'  # Replace with actual target variable name
-    X, y = split_data(df, features, target)
-    print("Features and target loaded.")
+def load_data(csv_file):
+    data = pd.read_csv(csv_file)
+    X = data[['description', 'location', 'price']]  # Features
+    y = data['price']  # Target variable (for regression)
+    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+    return X_train, X_test, y_train, y_test

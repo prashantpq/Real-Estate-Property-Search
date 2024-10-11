@@ -1,25 +1,12 @@
-# src/models/text_model.py
+from tensorflow.keras.models import Sequential
+from tensorflow.keras.layers import Embedding, LSTM, Dense
 
-from sklearn.ensemble import RandomForestRegressor
-import joblib
-
-class TextModel:
-    def __init__(self):
-        self.model = RandomForestRegressor()
-
-    def train(self, X_train, y_train):
-        self.model.fit(X_train, y_train)
-
-    def predict(self, X_test):
-        return self.model.predict(X_test)
-
-    def save(self, filepath):
-        joblib.dump(self.model, filepath)
-
-    def load(self, filepath):
-        self.model = joblib.load(filepath)
-
-if __name__ == "__main__":
-    # Example usage
-    # This section can be filled in with appropriate training/testing code
-    pass
+def build_text_model(vocab_size, embedding_dim, input_length):
+    model = Sequential([
+        Embedding(vocab_size, embedding_dim, input_length=input_length),
+        LSTM(128, return_sequences=False),
+        Dense(64, activation='relu'),
+        Dense(1)  # Predicting similarity score or price
+    ])
+    model.compile(optimizer='adam', loss='mse', metrics=['mae'])
+    return model

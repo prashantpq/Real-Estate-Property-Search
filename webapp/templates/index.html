@@ -1,32 +1,41 @@
-<!-- webapp/templates/index.html -->
+<!-- index.html -->
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Real Estate Property Search</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <title>Property Search</title>
 </head>
 <body>
-    <div class="container">
-        <h1>Real Estate Property Price Prediction</h1>
-        <form action="/predict" method="post" enctype="multipart/form-data">
-            <div>
-                <label for="text_input">Property Description:</label>
-                <textarea id="text_input" name="text_input" rows="4" required></textarea>
-            </div>
-            <div>
-                <label for="image_input">Property Image:</label>
-                <input type="file" id="image_input" name="image_input" accept="image/*" required>
-            </div>
-            <div>
-                <button type="submit">Predict Price</button>
-            </div>
-        </form>
-        {% if prediction %}
-            <h2>{{ prediction }}</h2>
-        {% endif %}
-    </div>
-    <script src="{{ url_for('static', filename='js/app.js') }}"></script>
+    <h1>Search for Similar Properties</h1>
+    
+    <form method="POST">
+        <label for="description">Enter Property Description:</label><br>
+        <textarea name="description" rows="4" cols="50" required></textarea><br><br>
+
+        <label for="location">Enter Location:</label><br>
+        <input type="text" name="location" required><br><br>
+
+        <label for="price">Enter Price:</label><br>
+        <input type="number" name="price" required><br><br>
+
+        <input type="submit" value="Search">
+    </form>
+    
+    <h2>Top 5 Similar Properties</h2>
+
+    {% if message %}
+    <p>{{ message }}</p>
+    {% endif %}
+    
+    {% if properties %}
+    <ul>
+        {% for property in properties %}
+        <li>
+            <strong>Description:</strong> {{ property['description'] }}<br>
+            <strong>Location:</strong> {{ property['location'] }}<br>
+            <strong>Price:</strong> ₹{{ property['price'] }}
+        </li>
+        {% endfor %}
+    </ul>
+    {% endif %}
 </body>
 </html>
