@@ -12,9 +12,8 @@ The **Real Estate Property Search** project is an AI-driven multimodal applicati
 - [License](#license)
 
 ## Features
-- Input property descriptions via text.
-- Upload images of properties for analysis.
-- Predict estimated property prices using machine learning models.
+- Input property descriptions,location,price  via text.
+- Display top 5 property with their details using machine learning models.
 
 ## Installation
 1. Clone the repository to your local machine:
