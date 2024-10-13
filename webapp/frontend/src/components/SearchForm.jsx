@@ -1,13 +1,19 @@
+// webapp/frontend/src/components/SearchForm.jsx
 import React, { useState } from 'react';
 
-const Search = ({ onSearch }) => {
+const SearchForm = ({ onSubmit }) => {
     const [description, setDescription] = useState('');
     const [location, setLocation] = useState('');
     const [price, setPrice] = useState('');
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        onSearch({ description, location, price });
+        const inputData = {
+            description,
+            location,
+            price,
+        };
+        onSubmit(inputData); // Call the onSubmit function with the input data
     };
 
     return (
@@ -26,7 +32,7 @@ const Search = ({ onSearch }) => {
             />
             <input
                 type="number"
-                placeholder="Max Price"
+                placeholder="Price"
                 value={price}
                 onChange={(e) => setPrice(e.target.value)}
             />
@@ -35,4 +41,4 @@ const Search = ({ onSearch }) => {
     );
 };
 
-export default Search;
+export default SearchForm;
