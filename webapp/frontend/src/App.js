@@ -1,7 +1,7 @@
 // webapp/frontend/src/App.js
 import React, { useState } from 'react';
-import PropertyCard from "./components/PropertyCard"; // Update to the correct file name
-import SearchForm from './components/SearchForm'; // Import the new SearchForm component
+import PropertyCard from "./components/PropertyCard"; // Updated to correct file name
+import Search from './components/Search'; // Search component for input
 import Navbar from "./components/Navbar";
 import Header from "./components/Header";
 import Category from "./components/Category";
@@ -23,7 +23,7 @@ function App() {
                 },
                 body: JSON.stringify(inputData),
             });
-            
+
             if (response.ok) {
                 const data = await response.json();
                 setResults(data); // Update state with the fetched data
@@ -39,7 +39,7 @@ function App() {
         <div className="App container-xxl bg-white p-0">
             <Navbar />
             <Header />
-            <SearchForm onSubmit={handleSearchSubmit} /> {/* Add the SearchForm */}
+            <Search onSearch={handleSearchSubmit} /> {/* Add the Search component */}
             <Category />
             <About />
             <PropertyCard results={results} /> {/* Pass the results to PropertyCard */}

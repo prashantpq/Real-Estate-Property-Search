@@ -1,18 +1,28 @@
 from flask import Flask, request, jsonify
-import random  # Replace with your actual data retrieval logic
+import pandas as pd
 
 app = Flask(__name__)
 
-@app.route('/api/search', methods=['POST'])
-def search():
-    input_data = request.json  # Get the input data from the request
-    print("Received input data:", input_data)  # Debugging line
+# Load dataset
+data_path = '../data/processed/listings_clean.csv'
+df = pd.read_csv(data_path)
 
-    # Simulating a search for properties (Replace with your actual search logic)
-    results = [
-        {"title": f"Flat {i}", "description": f"Description of Flat {i}", "price": random.randint(1000000, 5000000)}
-        for i in range(1, 6)
-    ]
+@app.route('/api/search', methods=['POST'])
+def search_properties():
+    data = request.json
+    description = data.get('description', '').lower()
+    location = data.get('location', '').lower()
+    price = float(data.get('price', 0))
+
+    # Filter the dataset
+    filtered_df = df[
+        (df['description'].str.lower().str.contains(description)) &
+        (df['location'].str.lower().str.contains(location)) &
+        (df['price'] <= price)
+    ].head(5)
+
+    # Convert results to a list of dictionaries
+    results = filtered_df.to_dict(orient='records')
 
     return jsonify(results)
 

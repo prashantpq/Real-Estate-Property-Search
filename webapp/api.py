@@ -1,25 +1,33 @@
 # webapp/api.py
 from flask import Flask, request, jsonify
-# Import your model and any necessary libraries
+import pandas as pd
 
 app = Flask(__name__)
 
+# Load the cleaned property dataset
+data_path = '../data/processed/listings_clean.csv'  # Update with the correct path
+df = pd.read_csv(data_path)
+
 @app.route('/api/search', methods=['POST'])
 def search_properties():
-    data = request.json
-    description = data.get('description')
-    location = data.get('location')
-    price = data.get('price')
+    input_data = request.get_json()
+    description = input_data.get('description', '').lower()
+    location = input_data.get('location', '').lower()
+    max_price = input_data.get('price', None)
 
-    # Here, implement your logic to retrieve top 5 properties based on the criteria
-    results = get_top_5_properties(description, location, price)
+    # Filter the dataframe based on the user inputs
+    filtered_df = df[
+        (df['description'].str.contains(description, case=False, na=False)) &
+        (df['location'].str.contains(location, case=False, na=False))
+    ]
 
-    return jsonify(results)
+    if max_price:
+        filtered_df = filtered_df[filtered_df['price'] <= float(max_price)]
 
-def get_top_5_properties(description, location, price):
-    # Logic to fetch top 5 properties
-    # This could involve querying a database or using a model to predict properties
-    return top_5_results  # Replace with your actual logic
+    # Sort and return the top 5 results
+    top_results = filtered_df.head(5).to_dict(orient='records')
+
+    return jsonify(top_results)
 
 if __name__ == '__main__':
     app.run(debug=True)
